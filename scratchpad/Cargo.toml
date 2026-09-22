@@ -1,0 +1,6 @@
+[workspace]
+resolver = "2"
+members = ["./laya-burn", "./laya-ort/cli"]
+
+[profile.release]
+debug = false

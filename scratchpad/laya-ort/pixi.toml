@@ -1,0 +1,44 @@
+[project]
+authors = ["Zicklag <zicklag@katharostech.com>"]
+channels = ["conda-forge"]
+description = "laya via ONNX Runtime: python export + rust cli playground"
+name = "laya-ort"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+# python side (HF_HOME/.cache-home/.uvcache are redirected in the environment:
+# ~/.cache is not writable in the agent sandbox)
+download = { cmd = "python export/download_model.py", env = { HF_HOME = ".hfhome", HF_HUB_DISABLE_XET = "1" } }
+export = { cmd = "python export/export_onnx.py" }
+golden = { cmd = "python export/export_golden.py" }
+# rust side (load-dynamic: ORT dylib comes from the pypi onnxruntime wheel)
+build = { cmd = "cargo build --release --manifest-path cli/Cargo.toml" }
+classify = { cmd = "cargo run --release --manifest-path cli/Cargo.toml -- classify --questions cli/presets/email.json" }
+email = { cmd = "cargo run --release --manifest-path cli/Cargo.toml -- email" }
+repl = { cmd = "cargo run --release --manifest-path cli/Cargo.toml -- repl" }
+validate = { cmd = "cargo run --release --manifest-path cli/Cargo.toml -- validate" }
+bench = { cmd = "cargo run --release --manifest-path cli/Cargo.toml -- bench" }
+
+[dependencies]
+python = "3.12.*"
+pip = "*"
+
+# torch is pinned to the CPU build (==2.14.0+cpu), which only exists on the
+# pytorch wheel index. uv's default first-index strategy refuses to cross
+# indexes for it, hence unsafe-best-match; the exact pin prevents grabbing a
+# CUDA build from PyPI.
+[pypi-options]
+index-url = "https://pypi.org/simple"
+extra-index-urls = ["https://download.pytorch.org/whl/cpu"]
+index-strategy = "unsafe-best-match"
+
+[pypi-dependencies]
+laya = "*"
+onnx = "*"
+onnxruntime = "*"
+onnxscript = "*"
+torch = "==2.14.0+cpu"
+transformers = "*"
+huggingface_hub = "*"
+numpy = "*"

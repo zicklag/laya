@@ -1,0 +1,8 @@
+.pixi/
+__pycache__/
+cli/target/
+cli/model/
+.cache-home/
+.uvcache/
+.hfhome/
+*.onnx

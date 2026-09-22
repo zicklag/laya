@@ -1,0 +1,4683 @@
+[
+ {
+  "name": "billing_invoice::email.json",
+  "state": {
+   "subject": "Invoice #4471 is attached",
+   "body": "Hi team, please find attached the invoice for our March order. The total is $4,120.00 and it looks like the PO number is missing. Can you confirm the due date and send a corrected copy with our PO number PO-9931? Thanks, Priya",
+   "from": "priya@example.com"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "billing",
+     "probabilities": {
+      "billing": 0.9945,
+      "technical": 0.0008,
+      "sales": 0.0023,
+      "security": 0.0005,
+      "hr": 0.0006,
+      "other": 0.0013
+     },
+     "confidence": 0.9765,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.0011,
+     "confidence": 0.9989,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.0348,
+     "confidence": 0.9652,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.3252,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.0312,
+      "1": 0.6125,
+      "2": 0.3563
+     },
+     "confidence": 0.2936,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.2057,
+     "confidence": 0.7943,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 647,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "billing_invoice::triage.json",
+  "state": {
+   "subject": "Invoice #4471 is attached",
+   "body": "Hi team, please find attached the invoice for our March order. The total is $4,120.00 and it looks like the PO number is missing. Can you confirm the due date and send a corrected copy with our PO number PO-9931? Thanks, Priya",
+   "from": "priya@example.com"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "billing_question",
+     "probabilities": {
+      "refund": 0.1928,
+      "technical_help": 0.0178,
+      "billing_question": 0.5956,
+      "information": 0.0096,
+      "cancellation": 0.0068,
+      "other": 0.1775
+     },
+     "confidence": 0.3957,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.1228,
+     "confidence": 0.8772,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 1.0954,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.2564,
+      "1": 0.4154,
+      "2": 0.3045,
+      "3": 0.0237
+     },
+     "confidence": 0.1598,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.1584,
+     "confidence": 0.8416,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.0313,
+     "confidence": 0.9687,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 664,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "refund_request::email.json",
+  "state": {
+   "subject": "Refund for duplicate charge",
+   "body": "Hello, I was charged twice for my subscription this month (order 88123). I would like a refund of the duplicate $29 charge to my original payment method. Please confirm once processed.",
+   "from": "sam@example.org"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "billing",
+     "probabilities": {
+      "billing": 0.9722,
+      "technical": 0.0036,
+      "sales": 0.0111,
+      "security": 0.0056,
+      "hr": 0.0022,
+      "other": 0.0052
+     },
+     "confidence": 0.9063,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.2081,
+     "confidence": 0.7919,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.1437,
+     "confidence": 0.8563,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.0732,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.1126,
+      "1": 0.7015,
+      "2": 0.1858
+     },
+     "confidence": 0.2651,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.4504,
+     "confidence": 0.5496,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 537,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "refund_request::triage.json",
+  "state": {
+   "subject": "Refund for duplicate charge",
+   "body": "Hello, I was charged twice for my subscription this month (order 88123). I would like a refund of the duplicate $29 charge to my original payment method. Please confirm once processed.",
+   "from": "sam@example.org"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "refund",
+     "probabilities": {
+      "refund": 0.9999,
+      "technical_help": 0.0,
+      "billing_question": 0.0,
+      "information": 0.0,
+      "cancellation": 0.0,
+      "other": 0.0
+     },
+     "confidence": 0.9992,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.062,
+     "confidence": 0.938,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 1.3396,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.1791,
+      "1": 0.3287,
+      "2": 0.4659,
+      "3": 0.0264
+     },
+     "confidence": 0.1882,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.8208,
+     "confidence": 0.8208,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.0353,
+     "confidence": 0.9647,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 554,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "phishing_credentials::email.json",
+  "state": {
+   "subject": "Urgent: verify your account now",
+   "body": "Dear customer, we detected unusual activity in your account. You must verify your identity within 24 hours or your account will be suspended. Click http://secure-verify.example-login.ru/enter and enter your username, password and card number. This is an automated message, do not reply.",
+   "from": "security-alert@example-login.ru"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "security",
+     "probabilities": {
+      "billing": 0.0008,
+      "technical": 0.0038,
+      "sales": 0.0009,
+      "security": 0.993,
+      "hr": 0.0004,
+      "other": 0.001
+     },
+     "confidence": 0.9715,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.9799,
+     "confidence": 0.9799,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.9542,
+     "confidence": 0.9542,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.6427,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.0212,
+      "1": 0.315,
+      "2": 0.6638
+     },
+     "confidence": 0.347,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.6553,
+     "confidence": 0.6553,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 677,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "phishing_credentials::triage.json",
+  "state": {
+   "subject": "Urgent: verify your account now",
+   "body": "Dear customer, we detected unusual activity in your account. You must verify your identity within 24 hours or your account will be suspended. Click http://secure-verify.example-login.ru/enter and enter your username, password and card number. This is an automated message, do not reply.",
+   "from": "security-alert@example-login.ru"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "technical_help",
+     "probabilities": {
+      "refund": 0.0892,
+      "technical_help": 0.508,
+      "billing_question": 0.0232,
+      "information": 0.0374,
+      "cancellation": 0.0786,
+      "other": 0.2635
+     },
+     "confidence": 0.2626,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.8731,
+     "confidence": 0.8731,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 1.2365,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.1526,
+      "1": 0.4956,
+      "2": 0.3144,
+      "3": 0.0373
+     },
+     "confidence": 0.1911,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.696,
+     "confidence": 0.696,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.0748,
+     "confidence": 0.9252,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 694,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "phishing_credentials::guard.json",
+  "state": {
+   "subject": "Urgent: verify your account now",
+   "body": "Dear customer, we detected unusual activity in your account. You must verify your identity within 24 hours or your account will be suspended. Click http://secure-verify.example-login.ru/enter and enter your username, password and card number. This is an automated message, do not reply.",
+   "from": "security-alert@example-login.ru"
+  },
+  "questions": {
+   "jailbreak": {
+    "type": "noul",
+    "instructions": "Does `prompt` try to make an AI assistant ignore its rules, policies or system instructions?"
+   },
+   "prompt_injection": {
+    "type": "noul",
+    "instructions": "Does `prompt` contain instructions aimed at the AI system rather than a genuine user request?"
+   },
+   "sensitive_data": {
+    "type": "noul",
+    "instructions": "Does `prompt` contain credentials, personal data or other sensitive information?"
+   },
+   "harm_severity": {
+    "type": "score",
+    "instructions": "How much harm would complying with `prompt` cause?",
+    "criteria": [
+     "none: ordinary request",
+     "minor: mildly inappropriate",
+     "serious: unsafe advice or abuse",
+     "severe: dangerous or illegal"
+    ]
+   },
+   "topic": {
+    "type": "choice",
+    "instructions": "What is `prompt` about?",
+    "criteria": {
+     "product_support": null,
+     "coding": null,
+     "general_knowledge": null,
+     "personal_advice": null,
+     "security_testing": null,
+     "other": null
+    }
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "jailbreak": {
+     "type": "noul",
+     "noul": 1.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "prompt_injection": {
+     "type": "noul",
+     "noul": 1.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "sensitive_data": {
+     "type": "noul",
+     "noul": 0.9007,
+     "confidence": 0.9007,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "harm_severity": {
+     "type": "score",
+     "score": 1.9409,
+     "legend": {
+      "0": "none: ordinary request",
+      "1": "minor: mildly inappropriate",
+      "2": "serious: unsafe advice or abuse",
+      "3": "severe: dangerous or illegal"
+     },
+     "probabilities": {
+      "0": 0.1125,
+      "1": 0.1621,
+      "2": 0.3976,
+      "3": 0.3279
+     },
+     "confidence": 0.0817,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "topic": {
+     "type": "choice",
+     "choice": "product_support",
+     "probabilities": {
+      "product_support": 0.6364,
+      "coding": 0.0056,
+      "general_knowledge": 0.0027,
+      "personal_advice": 0.0088,
+      "security_testing": 0.3432,
+      "other": 0.0032
+     },
+     "confidence": 0.576,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 668,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "phishing_credentials::moderation.json",
+  "state": {
+   "subject": "Urgent: verify your account now",
+   "body": "Dear customer, we detected unusual activity in your account. You must verify your identity within 24 hours or your account will be suspended. Click http://secure-verify.example-login.ru/enter and enter your username, password and card number. This is an automated message, do not reply.",
+   "from": "security-alert@example-login.ru"
+  },
+  "questions": {
+   "toxic": {
+    "type": "noul",
+    "instructions": "Is `post` toxic: rude, disrespectful or likely to make someone leave the discussion?"
+   },
+   "harassment": {
+    "type": "noul",
+    "instructions": "Does `post` target or harass a specific person?"
+   },
+   "threat": {
+    "type": "noul",
+    "instructions": "Does `post` threaten violence, harm or intimidation?"
+   },
+   "spam": {
+    "type": "noul",
+    "instructions": "Is `post` spam or advertising?"
+   },
+   "severity": {
+    "type": "score",
+    "instructions": "How severe is any rule-breaking in `post`?",
+    "criteria": [
+     "no rule-breaking: ordinary on-topic post",
+     "mild: rude tone or off-topic, no target",
+     "clear violation: insults, harassment or spam aimed at someone",
+     "severe: threats, hate speech or calls for violence"
+    ]
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "toxic": {
+     "type": "noul",
+     "noul": 0.0122,
+     "confidence": 0.9878,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "harassment": {
+     "type": "noul",
+     "noul": 0.076,
+     "confidence": 0.924,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "threat": {
+     "type": "noul",
+     "noul": 0.2596,
+     "confidence": 0.7404,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "spam": {
+     "type": "noul",
+     "noul": 1.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "severity": {
+     "type": "score",
+     "score": 1.4923,
+     "legend": {
+      "0": "no rule-breaking: ordinary on-topic post",
+      "1": "mild: rude tone or off-topic, no target",
+      "2": "clear violation: insults, harassment or spam aimed at someone",
+      "3": "severe: threats, hate speech or calls for violence"
+     },
+     "probabilities": {
+      "0": 0.2909,
+      "1": 0.2075,
+      "2": 0.22,
+      "3": 0.2816
+     },
+     "confidence": 0.0078,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 681,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "phishing_credentials::router.json",
+  "state": {
+   "subject": "Urgent: verify your account now",
+   "body": "Dear customer, we detected unusual activity in your account. You must verify your identity within 24 hours or your account will be suspended. Click http://secure-verify.example-login.ru/enter and enter your username, password and card number. This is an automated message, do not reply.",
+   "from": "security-alert@example-login.ru"
+  },
+  "questions": {
+   "difficulty": {
+    "type": "score",
+    "instructions": "How hard is `request` for a language model?",
+    "criteria": [
+     "trivial: a lookup or one-liner",
+     "easy: short answer, no reasoning",
+     "moderate: several steps",
+     "hard: long multi-step reasoning or specialist knowledge"
+    ]
+   },
+   "domain": {
+    "type": "choice",
+    "instructions": "What domain does `request` belong to?",
+    "criteria": {
+     "code": "software engineering, programming, refactoring, architecture, debugging",
+     "math_or_logic": "mathematics, logic puzzles, proofs, complex calculation",
+     "writing": "creative writing, essays, emails, blog posts, copywriting",
+     "factual_lookup": "facts, definitions, trivia, history",
+     "data_analysis": "statistics, SQL, data manipulation, metrics",
+     "chitchat": "casual conversation, greetings, small talk"
+    }
+   },
+   "needs_tools": {
+    "type": "noul",
+    "instructions": "Does answering `request` require external tools, search or private data?"
+   },
+   "is_sensitive": {
+    "type": "noul",
+    "instructions": "Does `request` involve money, legal, medical or safety consequences?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "difficulty": {
+     "type": "score",
+     "score": 1.2653,
+     "legend": {
+      "0": "trivial: a lookup or one-liner",
+      "1": "easy: short answer, no reasoning",
+      "2": "moderate: several steps",
+      "3": "hard: long multi-step reasoning or specialist knowledge"
+     },
+     "probabilities": {
+      "0": 0.1665,
+      "1": 0.4549,
+      "2": 0.3254,
+      "3": 0.0532
+     },
+     "confidence": 0.1502,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "domain": {
+     "type": "choice",
+     "choice": "code",
+     "probabilities": {
+      "code": 0.5964,
+      "math_or_logic": 0.0492,
+      "writing": 0.0475,
+      "factual_lookup": 0.0669,
+      "data_analysis": 0.0771,
+      "chitchat": 0.163
+     },
+     "confidence": 0.2883,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_tools": {
+     "type": "noul",
+     "noul": 0.9018,
+     "confidence": 0.9018,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_sensitive": {
+     "type": "noul",
+     "noul": 0.178,
+     "confidence": 0.822,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 604,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "tech_outage::email.json",
+  "state": {
+   "subject": "Production down: checkout 500s",
+   "body": "Our production cluster has been returning 500 errors on checkout since the Monday deploy. Roughly 40% of checkouts fail and we are losing about $2k/hour. We already tried a rollback and cache flush. Need engineering on this now.",
+   "from": "ops@example.com"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "technical",
+     "probabilities": {
+      "billing": 0.0025,
+      "technical": 0.9724,
+      "sales": 0.0028,
+      "security": 0.0104,
+      "hr": 0.0031,
+      "other": 0.0087
+     },
+     "confidence": 0.9076,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.0004,
+     "confidence": 0.9996,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.4636,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.0177,
+      "1": 0.501,
+      "2": 0.4813
+     },
+     "confidence": 0.2996,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.1635,
+     "confidence": 0.8365,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 602,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "tech_outage::triage.json",
+  "state": {
+   "subject": "Production down: checkout 500s",
+   "body": "Our production cluster has been returning 500 errors on checkout since the Monday deploy. Roughly 40% of checkouts fail and we are losing about $2k/hour. We already tried a rollback and cache flush. Need engineering on this now.",
+   "from": "ops@example.com"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "technical_help",
+     "probabilities": {
+      "refund": 0.0015,
+      "technical_help": 0.9884,
+      "billing_question": 0.0012,
+      "information": 0.0016,
+      "cancellation": 0.001,
+      "other": 0.0063
+     },
+     "confidence": 0.956,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.1272,
+     "confidence": 0.8728,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 1.3045,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.139,
+      "1": 0.4452,
+      "2": 0.3881,
+      "3": 0.0277
+     },
+     "confidence": 0.2057,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.0876,
+     "confidence": 0.9124,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.0317,
+     "confidence": 0.9683,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 619,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "tech_outage::guard.json",
+  "state": {
+   "subject": "Production down: checkout 500s",
+   "body": "Our production cluster has been returning 500 errors on checkout since the Monday deploy. Roughly 40% of checkouts fail and we are losing about $2k/hour. We already tried a rollback and cache flush. Need engineering on this now.",
+   "from": "ops@example.com"
+  },
+  "questions": {
+   "jailbreak": {
+    "type": "noul",
+    "instructions": "Does `prompt` try to make an AI assistant ignore its rules, policies or system instructions?"
+   },
+   "prompt_injection": {
+    "type": "noul",
+    "instructions": "Does `prompt` contain instructions aimed at the AI system rather than a genuine user request?"
+   },
+   "sensitive_data": {
+    "type": "noul",
+    "instructions": "Does `prompt` contain credentials, personal data or other sensitive information?"
+   },
+   "harm_severity": {
+    "type": "score",
+    "instructions": "How much harm would complying with `prompt` cause?",
+    "criteria": [
+     "none: ordinary request",
+     "minor: mildly inappropriate",
+     "serious: unsafe advice or abuse",
+     "severe: dangerous or illegal"
+    ]
+   },
+   "topic": {
+    "type": "choice",
+    "instructions": "What is `prompt` about?",
+    "criteria": {
+     "product_support": null,
+     "coding": null,
+     "general_knowledge": null,
+     "personal_advice": null,
+     "security_testing": null,
+     "other": null
+    }
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "jailbreak": {
+     "type": "noul",
+     "noul": 0.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "prompt_injection": {
+     "type": "noul",
+     "noul": 0.044,
+     "confidence": 0.956,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "sensitive_data": {
+     "type": "noul",
+     "noul": 0.0917,
+     "confidence": 0.9083,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "harm_severity": {
+     "type": "score",
+     "score": 1.8919,
+     "legend": {
+      "0": "none: ordinary request",
+      "1": "minor: mildly inappropriate",
+      "2": "serious: unsafe advice or abuse",
+      "3": "severe: dangerous or illegal"
+     },
+     "probabilities": {
+      "0": 0.0909,
+      "1": 0.2173,
+      "2": 0.4008,
+      "3": 0.291
+     },
+     "confidence": 0.08,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "topic": {
+     "type": "choice",
+     "choice": "product_support",
+     "probabilities": {
+      "product_support": 0.7766,
+      "coding": 0.0708,
+      "general_knowledge": 0.003,
+      "personal_advice": 0.0046,
+      "security_testing": 0.1419,
+      "other": 0.0032
+     },
+     "confidence": 0.5976,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 593,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "tech_outage::moderation.json",
+  "state": {
+   "subject": "Production down: checkout 500s",
+   "body": "Our production cluster has been returning 500 errors on checkout since the Monday deploy. Roughly 40% of checkouts fail and we are losing about $2k/hour. We already tried a rollback and cache flush. Need engineering on this now.",
+   "from": "ops@example.com"
+  },
+  "questions": {
+   "toxic": {
+    "type": "noul",
+    "instructions": "Is `post` toxic: rude, disrespectful or likely to make someone leave the discussion?"
+   },
+   "harassment": {
+    "type": "noul",
+    "instructions": "Does `post` target or harass a specific person?"
+   },
+   "threat": {
+    "type": "noul",
+    "instructions": "Does `post` threaten violence, harm or intimidation?"
+   },
+   "spam": {
+    "type": "noul",
+    "instructions": "Is `post` spam or advertising?"
+   },
+   "severity": {
+    "type": "score",
+    "instructions": "How severe is any rule-breaking in `post`?",
+    "criteria": [
+     "no rule-breaking: ordinary on-topic post",
+     "mild: rude tone or off-topic, no target",
+     "clear violation: insults, harassment or spam aimed at someone",
+     "severe: threats, hate speech or calls for violence"
+    ]
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "toxic": {
+     "type": "noul",
+     "noul": 0.0282,
+     "confidence": 0.9718,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "harassment": {
+     "type": "noul",
+     "noul": 0.0004,
+     "confidence": 0.9996,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "threat": {
+     "type": "noul",
+     "noul": 0.0001,
+     "confidence": 0.9999,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "spam": {
+     "type": "noul",
+     "noul": 0.001,
+     "confidence": 0.999,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "severity": {
+     "type": "score",
+     "score": 0.3297,
+     "legend": {
+      "0": "no rule-breaking: ordinary on-topic post",
+      "1": "mild: rude tone or off-topic, no target",
+      "2": "clear violation: insults, harassment or spam aimed at someone",
+      "3": "severe: threats, hate speech or calls for violence"
+     },
+     "probabilities": {
+      "0": 0.7951,
+      "1": 0.1228,
+      "2": 0.0395,
+      "3": 0.0426
+     },
+     "confidence": 0.4936,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 606,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "tech_outage::router.json",
+  "state": {
+   "subject": "Production down: checkout 500s",
+   "body": "Our production cluster has been returning 500 errors on checkout since the Monday deploy. Roughly 40% of checkouts fail and we are losing about $2k/hour. We already tried a rollback and cache flush. Need engineering on this now.",
+   "from": "ops@example.com"
+  },
+  "questions": {
+   "difficulty": {
+    "type": "score",
+    "instructions": "How hard is `request` for a language model?",
+    "criteria": [
+     "trivial: a lookup or one-liner",
+     "easy: short answer, no reasoning",
+     "moderate: several steps",
+     "hard: long multi-step reasoning or specialist knowledge"
+    ]
+   },
+   "domain": {
+    "type": "choice",
+    "instructions": "What domain does `request` belong to?",
+    "criteria": {
+     "code": "software engineering, programming, refactoring, architecture, debugging",
+     "math_or_logic": "mathematics, logic puzzles, proofs, complex calculation",
+     "writing": "creative writing, essays, emails, blog posts, copywriting",
+     "factual_lookup": "facts, definitions, trivia, history",
+     "data_analysis": "statistics, SQL, data manipulation, metrics",
+     "chitchat": "casual conversation, greetings, small talk"
+    }
+   },
+   "needs_tools": {
+    "type": "noul",
+    "instructions": "Does answering `request` require external tools, search or private data?"
+   },
+   "is_sensitive": {
+    "type": "noul",
+    "instructions": "Does `request` involve money, legal, medical or safety consequences?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "difficulty": {
+     "type": "score",
+     "score": 1.9835,
+     "legend": {
+      "0": "trivial: a lookup or one-liner",
+      "1": "easy: short answer, no reasoning",
+      "2": "moderate: several steps",
+      "3": "hard: long multi-step reasoning or specialist knowledge"
+     },
+     "probabilities": {
+      "0": 0.0135,
+      "1": 0.17,
+      "2": 0.636,
+      "3": 0.1805
+     },
+     "confidence": 0.3102,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "domain": {
+     "type": "choice",
+     "choice": "code",
+     "probabilities": {
+      "code": 0.9637,
+      "math_or_logic": 0.0044,
+      "writing": 0.0048,
+      "factual_lookup": 0.0027,
+      "data_analysis": 0.0166,
+      "chitchat": 0.0077
+     },
+     "confidence": 0.8844,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_tools": {
+     "type": "noul",
+     "noul": 0.1971,
+     "confidence": 0.8029,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_sensitive": {
+     "type": "noul",
+     "noul": 0.0998,
+     "confidence": 0.9002,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 544,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "sales_demo::email.json",
+  "state": {
+   "subject": "Interested in enterprise plan",
+   "body": "Hi, we are evaluating tools for our 200-person support team. Could you share enterprise pricing and set up a demo next week? We need SSO, audit logs and an on-prem option.",
+   "from": "dana@example.io"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "sales",
+     "probabilities": {
+      "billing": 0.0152,
+      "technical": 0.0426,
+      "sales": 0.5003,
+      "security": 0.2676,
+      "hr": 0.0378,
+      "other": 0.1366
+     },
+     "confidence": 0.2784,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.4882,
+     "confidence": 0.5118,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.3087,
+     "confidence": 0.6913,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.0278,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.2196,
+      "1": 0.5331,
+      "2": 0.2473
+     },
+     "confidence": 0.0772,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.4619,
+     "confidence": 0.5381,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 557,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "sales_demo::triage.json",
+  "state": {
+   "subject": "Interested in enterprise plan",
+   "body": "Hi, we are evaluating tools for our 200-person support team. Could you share enterprise pricing and set up a demo next week? We need SSO, audit logs and an on-prem option.",
+   "from": "dana@example.io"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "other",
+     "probabilities": {
+      "refund": 0.0304,
+      "technical_help": 0.0393,
+      "billing_question": 0.0438,
+      "information": 0.2937,
+      "cancellation": 0.0231,
+      "other": 0.5697
+     },
+     "confidence": 0.365,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.0847,
+     "confidence": 0.9153,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 0.6485,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.4722,
+      "1": 0.4257,
+      "2": 0.0836,
+      "3": 0.0186
+     },
+     "confidence": 0.2791,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.0001,
+     "confidence": 0.9999,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.1533,
+     "confidence": 0.8467,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 574,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "hr_leave::email.json",
+  "state": {
+   "subject": "Leave request next month",
+   "body": "Hi HR, I would like to request two weeks of leave from October 5 to October 16. My projects are on track and I have arranged coverage with Alex. Please let me know if the paperwork is needed.",
+   "from": "maria@example.com"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "hr",
+     "probabilities": {
+      "billing": 0.0001,
+      "technical": 0.0001,
+      "sales": 0.0001,
+      "security": 0.0001,
+      "hr": 0.9994,
+      "other": 0.0003
+     },
+     "confidence": 0.9966,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.0509,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.1325,
+      "1": 0.6841,
+      "2": 0.1834
+     },
+     "confidence": 0.2367,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.2309,
+     "confidence": 0.7691,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 557,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "hr_leave::triage.json",
+  "state": {
+   "subject": "Leave request next month",
+   "body": "Hi HR, I would like to request two weeks of leave from October 5 to October 16. My projects are on track and I have arranged coverage with Alex. Please let me know if the paperwork is needed.",
+   "from": "maria@example.com"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "other",
+     "probabilities": {
+      "refund": 0.0994,
+      "technical_help": 0.0273,
+      "billing_question": 0.0332,
+      "information": 0.2177,
+      "cancellation": 0.1024,
+      "other": 0.5199
+     },
+     "confidence": 0.2487,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.1782,
+     "confidence": 0.8218,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 0.6008,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.5053,
+      "1": 0.4042,
+      "2": 0.0749,
+      "3": 0.0156
+     },
+     "confidence": 0.3003,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.0001,
+     "confidence": 0.9999,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.1129,
+     "confidence": 0.8871,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 574,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "spam_bulk::email.json",
+  "state": {
+   "subject": "AMAZING DEAL: 90% off everything!!!",
+   "body": "Hurry!!! For the next 3 hours only, enjoy 90% off our entire catalog plus a free gift. Thousands of happy customers! Unsubscribe by replying STOP.",
+   "from": "deals@example-promo.biz"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "security",
+     "probabilities": {
+      "billing": 0.0008,
+      "technical": 0.0017,
+      "sales": 0.042,
+      "security": 0.9541,
+      "hr": 0.0004,
+      "other": 0.001
+     },
+     "confidence": 0.8856,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 1.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 1.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.1542,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.2763,
+      "1": 0.2932,
+      "2": 0.4305
+     },
+     "confidence": 0.0188,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.1461,
+     "confidence": 0.8539,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 572,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "spam_bulk::triage.json",
+  "state": {
+   "subject": "AMAZING DEAL: 90% off everything!!!",
+   "body": "Hurry!!! For the next 3 hours only, enjoy 90% off our entire catalog plus a free gift. Thousands of happy customers! Unsubscribe by replying STOP.",
+   "from": "deals@example-promo.biz"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "cancellation",
+     "probabilities": {
+      "refund": 0.1935,
+      "technical_help": 0.0148,
+      "billing_question": 0.0061,
+      "information": 0.0221,
+      "cancellation": 0.5239,
+      "other": 0.2397
+     },
+     "confidence": 0.3435,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.858,
+     "confidence": 0.858,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 1.8922,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.1211,
+      "1": 0.0873,
+      "2": 0.5699,
+      "3": 0.2217
+     },
+     "confidence": 0.1899,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.7071,
+     "confidence": 0.7071,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.0001,
+     "confidence": 0.9999,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 589,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "spam_bulk::guard.json",
+  "state": {
+   "subject": "AMAZING DEAL: 90% off everything!!!",
+   "body": "Hurry!!! For the next 3 hours only, enjoy 90% off our entire catalog plus a free gift. Thousands of happy customers! Unsubscribe by replying STOP.",
+   "from": "deals@example-promo.biz"
+  },
+  "questions": {
+   "jailbreak": {
+    "type": "noul",
+    "instructions": "Does `prompt` try to make an AI assistant ignore its rules, policies or system instructions?"
+   },
+   "prompt_injection": {
+    "type": "noul",
+    "instructions": "Does `prompt` contain instructions aimed at the AI system rather than a genuine user request?"
+   },
+   "sensitive_data": {
+    "type": "noul",
+    "instructions": "Does `prompt` contain credentials, personal data or other sensitive information?"
+   },
+   "harm_severity": {
+    "type": "score",
+    "instructions": "How much harm would complying with `prompt` cause?",
+    "criteria": [
+     "none: ordinary request",
+     "minor: mildly inappropriate",
+     "serious: unsafe advice or abuse",
+     "severe: dangerous or illegal"
+    ]
+   },
+   "topic": {
+    "type": "choice",
+    "instructions": "What is `prompt` about?",
+    "criteria": {
+     "product_support": null,
+     "coding": null,
+     "general_knowledge": null,
+     "personal_advice": null,
+     "security_testing": null,
+     "other": null
+    }
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "jailbreak": {
+     "type": "noul",
+     "noul": 0.9996,
+     "confidence": 0.9996,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "prompt_injection": {
+     "type": "noul",
+     "noul": 1.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "sensitive_data": {
+     "type": "noul",
+     "noul": 0.6051,
+     "confidence": 0.6051,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "harm_severity": {
+     "type": "score",
+     "score": 2.2094,
+     "legend": {
+      "0": "none: ordinary request",
+      "1": "minor: mildly inappropriate",
+      "2": "serious: unsafe advice or abuse",
+      "3": "severe: dangerous or illegal"
+     },
+     "probabilities": {
+      "0": 0.0546,
+      "1": 0.1073,
+      "2": 0.4121,
+      "3": 0.426
+     },
+     "confidence": 0.1869,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "topic": {
+     "type": "choice",
+     "choice": "product_support",
+     "probabilities": {
+      "product_support": 0.56,
+      "coding": 0.0454,
+      "general_knowledge": 0.0078,
+      "personal_advice": 0.0375,
+      "security_testing": 0.3094,
+      "other": 0.0398
+     },
+     "confidence": 0.3763,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 563,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "spam_bulk::moderation.json",
+  "state": {
+   "subject": "AMAZING DEAL: 90% off everything!!!",
+   "body": "Hurry!!! For the next 3 hours only, enjoy 90% off our entire catalog plus a free gift. Thousands of happy customers! Unsubscribe by replying STOP.",
+   "from": "deals@example-promo.biz"
+  },
+  "questions": {
+   "toxic": {
+    "type": "noul",
+    "instructions": "Is `post` toxic: rude, disrespectful or likely to make someone leave the discussion?"
+   },
+   "harassment": {
+    "type": "noul",
+    "instructions": "Does `post` target or harass a specific person?"
+   },
+   "threat": {
+    "type": "noul",
+    "instructions": "Does `post` threaten violence, harm or intimidation?"
+   },
+   "spam": {
+    "type": "noul",
+    "instructions": "Is `post` spam or advertising?"
+   },
+   "severity": {
+    "type": "score",
+    "instructions": "How severe is any rule-breaking in `post`?",
+    "criteria": [
+     "no rule-breaking: ordinary on-topic post",
+     "mild: rude tone or off-topic, no target",
+     "clear violation: insults, harassment or spam aimed at someone",
+     "severe: threats, hate speech or calls for violence"
+    ]
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "toxic": {
+     "type": "noul",
+     "noul": 0.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "harassment": {
+     "type": "noul",
+     "noul": 0.0638,
+     "confidence": 0.9362,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "threat": {
+     "type": "noul",
+     "noul": 0.1791,
+     "confidence": 0.8209,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "spam": {
+     "type": "noul",
+     "noul": 1.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "severity": {
+     "type": "score",
+     "score": 1.3372,
+     "legend": {
+      "0": "no rule-breaking: ordinary on-topic post",
+      "1": "mild: rude tone or off-topic, no target",
+      "2": "clear violation: insults, harassment or spam aimed at someone",
+      "3": "severe: threats, hate speech or calls for violence"
+     },
+     "probabilities": {
+      "0": 0.3389,
+      "1": 0.1346,
+      "2": 0.3768,
+      "3": 0.1496
+     },
+     "confidence": 0.0704,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 576,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "spam_bulk::router.json",
+  "state": {
+   "subject": "AMAZING DEAL: 90% off everything!!!",
+   "body": "Hurry!!! For the next 3 hours only, enjoy 90% off our entire catalog plus a free gift. Thousands of happy customers! Unsubscribe by replying STOP.",
+   "from": "deals@example-promo.biz"
+  },
+  "questions": {
+   "difficulty": {
+    "type": "score",
+    "instructions": "How hard is `request` for a language model?",
+    "criteria": [
+     "trivial: a lookup or one-liner",
+     "easy: short answer, no reasoning",
+     "moderate: several steps",
+     "hard: long multi-step reasoning or specialist knowledge"
+    ]
+   },
+   "domain": {
+    "type": "choice",
+    "instructions": "What domain does `request` belong to?",
+    "criteria": {
+     "code": "software engineering, programming, refactoring, architecture, debugging",
+     "math_or_logic": "mathematics, logic puzzles, proofs, complex calculation",
+     "writing": "creative writing, essays, emails, blog posts, copywriting",
+     "factual_lookup": "facts, definitions, trivia, history",
+     "data_analysis": "statistics, SQL, data manipulation, metrics",
+     "chitchat": "casual conversation, greetings, small talk"
+    }
+   },
+   "needs_tools": {
+    "type": "noul",
+    "instructions": "Does answering `request` require external tools, search or private data?"
+   },
+   "is_sensitive": {
+    "type": "noul",
+    "instructions": "Does `request` involve money, legal, medical or safety consequences?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "difficulty": {
+     "type": "score",
+     "score": 1.2509,
+     "legend": {
+      "0": "trivial: a lookup or one-liner",
+      "1": "easy: short answer, no reasoning",
+      "2": "moderate: several steps",
+      "3": "hard: long multi-step reasoning or specialist knowledge"
+     },
+     "probabilities": {
+      "0": 0.1197,
+      "1": 0.5776,
+      "2": 0.2349,
+      "3": 0.0678
+     },
+     "confidence": 0.2109,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "domain": {
+     "type": "choice",
+     "choice": "chitchat",
+     "probabilities": {
+      "code": 0.1217,
+      "math_or_logic": 0.1202,
+      "writing": 0.0938,
+      "factual_lookup": 0.1484,
+      "data_analysis": 0.1659,
+      "chitchat": 0.35
+     },
+     "confidence": 0.0615,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_tools": {
+     "type": "noul",
+     "noul": 0.9755,
+     "confidence": 0.9755,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_sensitive": {
+     "type": "noul",
+     "noul": 0.9415,
+     "confidence": 0.9415,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 520,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "thread_with_quotes::email.json",
+  "state": {
+   "subject": "Re: onboarding call follow-up",
+   "body": "Thanks for the notes from the onboarding call. One open question: do we need to migrate the legacy API keys before go-live or after?",
+   "from": "alex@example.com"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "other",
+     "probabilities": {
+      "billing": 0.0152,
+      "technical": 0.2403,
+      "sales": 0.0292,
+      "security": 0.1432,
+      "hr": 0.1265,
+      "other": 0.4456
+     },
+     "confidence": 0.2133,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.0389,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.1493,
+      "1": 0.6625,
+      "2": 0.1882
+     },
+     "confidence": 0.2071,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.1266,
+     "confidence": 0.8734,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 512,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "thread_with_quotes::triage.json",
+  "state": {
+   "subject": "Re: onboarding call follow-up",
+   "body": "Thanks for the notes from the onboarding call. One open question: do we need to migrate the legacy API keys before go-live or after?",
+   "from": "alex@example.com"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "other",
+     "probabilities": {
+      "refund": 0.0092,
+      "technical_help": 0.0595,
+      "billing_question": 0.01,
+      "information": 0.0833,
+      "cancellation": 0.0034,
+      "other": 0.8347
+     },
+     "confidence": 0.6461,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.0435,
+     "confidence": 0.9565,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 0.4757,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.6149,
+      "1": 0.3101,
+      "2": 0.0594,
+      "3": 0.0156
+     },
+     "confidence": 0.3546,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.0275,
+     "confidence": 0.9725,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 529,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "long_escalation::email.json",
+  "state": {
+   "subject": "Ongoing outage escalation",
+   "body": "Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. C",
+   "from": "vp@example.com"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "technical",
+     "probabilities": {
+      "billing": 0.0025,
+      "technical": 0.9746,
+      "sales": 0.0025,
+      "security": 0.0064,
+      "hr": 0.0022,
+      "other": 0.0117
+     },
+     "confidence": 0.9145,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.0696,
+     "confidence": 0.9304,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.1165,
+     "confidence": 0.8835,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.4628,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.0416,
+      "1": 0.454,
+      "2": 0.5044
+     },
+     "confidence": 0.2391,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.6273,
+     "confidence": 0.6273,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 2560,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "long_escalation::triage.json",
+  "state": {
+   "subject": "Ongoing outage escalation",
+   "body": "Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. Customers are seeing 500 errors on checkout and support tickets are piling up. Our production cluster has been failing intermittently since the deploy on Monday. C",
+   "from": "vp@example.com"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "technical_help",
+     "probabilities": {
+      "refund": 0.0068,
+      "technical_help": 0.9506,
+      "billing_question": 0.004,
+      "information": 0.0098,
+      "cancellation": 0.0037,
+      "other": 0.0252
+     },
+     "confidence": 0.8535,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.1903,
+     "confidence": 0.8097,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 1.1432,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.1592,
+      "1": 0.5657,
+      "2": 0.2479,
+      "3": 0.0272
+     },
+     "confidence": 0.2363,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.2544,
+     "confidence": 0.7456,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.0764,
+     "confidence": 0.9236,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 2560,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "unicode::email.json",
+  "state": {
+   "subject": "Facture et remboursement \u2014 commande 2024",
+   "body": "Bonjour, je vous \u00e9cris au sujet de la commande n\u00b02024 \u2013 la livraison est en retard et je souhaite un remboursement partiel. Vous pouvez joindre \u00e0 \ud83d\udcde +33 1 23 45 67 89. Merci d'avance, \u00c9lodie",
+   "from": "elodie@example.fr"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "billing",
+     "probabilities": {
+      "billing": 0.841,
+      "technical": 0.0099,
+      "sales": 0.0132,
+      "security": 0.1294,
+      "hr": 0.0015,
+      "other": 0.005
+     },
+     "confidence": 0.6935,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.948,
+     "confidence": 0.948,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.8899,
+     "confidence": 0.8899,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.1484,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.2839,
+      "1": 0.2837,
+      "2": 0.4324
+     },
+     "confidence": 0.0193,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.8592,
+     "confidence": 0.8592,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 742,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "unicode::triage.json",
+  "state": {
+   "subject": "Facture et remboursement \u2014 commande 2024",
+   "body": "Bonjour, je vous \u00e9cris au sujet de la commande n\u00b02024 \u2013 la livraison est en retard et je souhaite un remboursement partiel. Vous pouvez joindre \u00e0 \ud83d\udcde +33 1 23 45 67 89. Merci d'avance, \u00c9lodie",
+   "from": "elodie@example.fr"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "refund",
+     "probabilities": {
+      "refund": 0.9649,
+      "technical_help": 0.0043,
+      "billing_question": 0.0106,
+      "information": 0.0024,
+      "cancellation": 0.0105,
+      "other": 0.0074
+     },
+     "confidence": 0.8859,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.7242,
+     "confidence": 0.7242,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 1.093,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.2059,
+      "1": 0.546,
+      "2": 0.1973,
+      "3": 0.0508
+     },
+     "confidence": 0.1867,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.5953,
+     "confidence": 0.5953,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.3568,
+     "confidence": 0.6432,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 759,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "unicode::guard.json",
+  "state": {
+   "subject": "Facture et remboursement \u2014 commande 2024",
+   "body": "Bonjour, je vous \u00e9cris au sujet de la commande n\u00b02024 \u2013 la livraison est en retard et je souhaite un remboursement partiel. Vous pouvez joindre \u00e0 \ud83d\udcde +33 1 23 45 67 89. Merci d'avance, \u00c9lodie",
+   "from": "elodie@example.fr"
+  },
+  "questions": {
+   "jailbreak": {
+    "type": "noul",
+    "instructions": "Does `prompt` try to make an AI assistant ignore its rules, policies or system instructions?"
+   },
+   "prompt_injection": {
+    "type": "noul",
+    "instructions": "Does `prompt` contain instructions aimed at the AI system rather than a genuine user request?"
+   },
+   "sensitive_data": {
+    "type": "noul",
+    "instructions": "Does `prompt` contain credentials, personal data or other sensitive information?"
+   },
+   "harm_severity": {
+    "type": "score",
+    "instructions": "How much harm would complying with `prompt` cause?",
+    "criteria": [
+     "none: ordinary request",
+     "minor: mildly inappropriate",
+     "serious: unsafe advice or abuse",
+     "severe: dangerous or illegal"
+    ]
+   },
+   "topic": {
+    "type": "choice",
+    "instructions": "What is `prompt` about?",
+    "criteria": {
+     "product_support": null,
+     "coding": null,
+     "general_knowledge": null,
+     "personal_advice": null,
+     "security_testing": null,
+     "other": null
+    }
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "jailbreak": {
+     "type": "noul",
+     "noul": 0.9998,
+     "confidence": 0.9998,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "prompt_injection": {
+     "type": "noul",
+     "noul": 0.72,
+     "confidence": 0.72,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "sensitive_data": {
+     "type": "noul",
+     "noul": 0.5853,
+     "confidence": 0.5853,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "harm_severity": {
+     "type": "score",
+     "score": 1.3521,
+     "legend": {
+      "0": "none: ordinary request",
+      "1": "minor: mildly inappropriate",
+      "2": "serious: unsafe advice or abuse",
+      "3": "severe: dangerous or illegal"
+     },
+     "probabilities": {
+      "0": 0.1889,
+      "1": 0.4065,
+      "2": 0.2683,
+      "3": 0.1363
+     },
+     "confidence": 0.0584,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "topic": {
+     "type": "choice",
+     "choice": "product_support",
+     "probabilities": {
+      "product_support": 0.8149,
+      "coding": 0.0685,
+      "general_knowledge": 0.007,
+      "personal_advice": 0.0346,
+      "security_testing": 0.0463,
+      "other": 0.0286
+     },
+     "confidence": 0.5838,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 733,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "unicode::moderation.json",
+  "state": {
+   "subject": "Facture et remboursement \u2014 commande 2024",
+   "body": "Bonjour, je vous \u00e9cris au sujet de la commande n\u00b02024 \u2013 la livraison est en retard et je souhaite un remboursement partiel. Vous pouvez joindre \u00e0 \ud83d\udcde +33 1 23 45 67 89. Merci d'avance, \u00c9lodie",
+   "from": "elodie@example.fr"
+  },
+  "questions": {
+   "toxic": {
+    "type": "noul",
+    "instructions": "Is `post` toxic: rude, disrespectful or likely to make someone leave the discussion?"
+   },
+   "harassment": {
+    "type": "noul",
+    "instructions": "Does `post` target or harass a specific person?"
+   },
+   "threat": {
+    "type": "noul",
+    "instructions": "Does `post` threaten violence, harm or intimidation?"
+   },
+   "spam": {
+    "type": "noul",
+    "instructions": "Is `post` spam or advertising?"
+   },
+   "severity": {
+    "type": "score",
+    "instructions": "How severe is any rule-breaking in `post`?",
+    "criteria": [
+     "no rule-breaking: ordinary on-topic post",
+     "mild: rude tone or off-topic, no target",
+     "clear violation: insults, harassment or spam aimed at someone",
+     "severe: threats, hate speech or calls for violence"
+    ]
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "toxic": {
+     "type": "noul",
+     "noul": 0.0001,
+     "confidence": 0.9999,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "harassment": {
+     "type": "noul",
+     "noul": 0.0001,
+     "confidence": 0.9999,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "threat": {
+     "type": "noul",
+     "noul": 0.0254,
+     "confidence": 0.9746,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "spam": {
+     "type": "noul",
+     "noul": 0.9857,
+     "confidence": 0.9857,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "severity": {
+     "type": "score",
+     "score": 1.0207,
+     "legend": {
+      "0": "no rule-breaking: ordinary on-topic post",
+      "1": "mild: rude tone or off-topic, no target",
+      "2": "clear violation: insults, harassment or spam aimed at someone",
+      "3": "severe: threats, hate speech or calls for violence"
+     },
+     "probabilities": {
+      "0": 0.4404,
+      "1": 0.1872,
+      "2": 0.2836,
+      "3": 0.0888
+     },
+     "confidence": 0.1003,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 746,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "unicode::router.json",
+  "state": {
+   "subject": "Facture et remboursement \u2014 commande 2024",
+   "body": "Bonjour, je vous \u00e9cris au sujet de la commande n\u00b02024 \u2013 la livraison est en retard et je souhaite un remboursement partiel. Vous pouvez joindre \u00e0 \ud83d\udcde +33 1 23 45 67 89. Merci d'avance, \u00c9lodie",
+   "from": "elodie@example.fr"
+  },
+  "questions": {
+   "difficulty": {
+    "type": "score",
+    "instructions": "How hard is `request` for a language model?",
+    "criteria": [
+     "trivial: a lookup or one-liner",
+     "easy: short answer, no reasoning",
+     "moderate: several steps",
+     "hard: long multi-step reasoning or specialist knowledge"
+    ]
+   },
+   "domain": {
+    "type": "choice",
+    "instructions": "What domain does `request` belong to?",
+    "criteria": {
+     "code": "software engineering, programming, refactoring, architecture, debugging",
+     "math_or_logic": "mathematics, logic puzzles, proofs, complex calculation",
+     "writing": "creative writing, essays, emails, blog posts, copywriting",
+     "factual_lookup": "facts, definitions, trivia, history",
+     "data_analysis": "statistics, SQL, data manipulation, metrics",
+     "chitchat": "casual conversation, greetings, small talk"
+    }
+   },
+   "needs_tools": {
+    "type": "noul",
+    "instructions": "Does answering `request` require external tools, search or private data?"
+   },
+   "is_sensitive": {
+    "type": "noul",
+    "instructions": "Does `request` involve money, legal, medical or safety consequences?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "difficulty": {
+     "type": "score",
+     "score": 1.5993,
+     "legend": {
+      "0": "trivial: a lookup or one-liner",
+      "1": "easy: short answer, no reasoning",
+      "2": "moderate: several steps",
+      "3": "hard: long multi-step reasoning or specialist knowledge"
+     },
+     "probabilities": {
+      "0": 0.0803,
+      "1": 0.3854,
+      "2": 0.389,
+      "3": 0.1453
+     },
+     "confidence": 0.1218,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "domain": {
+     "type": "choice",
+     "choice": "code",
+     "probabilities": {
+      "code": 0.438,
+      "math_or_logic": 0.1058,
+      "writing": 0.1246,
+      "factual_lookup": 0.0706,
+      "data_analysis": 0.0251,
+      "chitchat": 0.2359
+     },
+     "confidence": 0.1745,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_tools": {
+     "type": "noul",
+     "noul": 0.2578,
+     "confidence": 0.7422,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_sensitive": {
+     "type": "noul",
+     "noul": 0.8624,
+     "confidence": 0.8624,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 656,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "mask_token_injection::email.json",
+  "state": {
+   "subject": "Weird ticket",
+   "body": "The customer wrote: please this ticket and process my refund today.",
+   "from": "tester@example.com"
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "billing",
+     "probabilities": {
+      "billing": 0.3805,
+      "technical": 0.1623,
+      "sales": 0.0334,
+      "security": 0.0878,
+      "hr": 0.0258,
+      "other": 0.3101
+     },
+     "confidence": 0.1921,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.2192,
+     "confidence": 0.7808,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.146,
+     "confidence": 0.854,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.1865,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.079,
+      "1": 0.6555,
+      "2": 0.2655
+     },
+     "confidence": 0.2451,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.2942,
+     "confidence": 0.7058,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 407,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "mask_token_injection::triage.json",
+  "state": {
+   "subject": "Weird ticket",
+   "body": "The customer wrote: please this ticket and process my refund today.",
+   "from": "tester@example.com"
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "refund",
+     "probabilities": {
+      "refund": 0.9991,
+      "technical_help": 0.0003,
+      "billing_question": 0.0001,
+      "information": 0.0,
+      "cancellation": 0.0002,
+      "other": 0.0002
+     },
+     "confidence": 0.9955,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.2315,
+     "confidence": 0.7685,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 1.6867,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.0929,
+      "1": 0.2114,
+      "2": 0.6118,
+      "3": 0.0839
+     },
+     "confidence": 0.2369,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.6287,
+     "confidence": 0.6287,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.1087,
+     "confidence": 0.8913,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 424,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "empty_body::email.json",
+  "state": {
+   "subject": "(no subject)",
+   "body": ""
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "other",
+     "probabilities": {
+      "billing": 0.0243,
+      "technical": 0.0327,
+      "sales": 0.021,
+      "security": 0.157,
+      "hr": 0.0119,
+      "other": 0.7532
+     },
+     "confidence": 0.5311,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.9242,
+     "confidence": 0.9242,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.707,
+     "confidence": 0.707,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 0.6063,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.5179,
+      "1": 0.3578,
+      "2": 0.1243
+     },
+     "confidence": 0.1192,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.0988,
+     "confidence": 0.9012,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 287,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "empty_body::triage.json",
+  "state": {
+   "subject": "(no subject)",
+   "body": ""
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "other",
+     "probabilities": {
+      "refund": 0.0363,
+      "technical_help": 0.009,
+      "billing_question": 0.0162,
+      "information": 0.0157,
+      "cancellation": 0.0098,
+      "other": 0.9129
+     },
+     "confidence": 0.7637,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.0628,
+     "confidence": 0.9372,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 0.8998,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.4104,
+      "1": 0.3218,
+      "2": 0.2254,
+      "3": 0.0424
+     },
+     "confidence": 0.1342,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.1473,
+     "confidence": 0.8527,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.1063,
+     "confidence": 0.8937,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 304,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "raw_text_ticket::email.json",
+  "state": "Ticket 55102: user reports the mobile app crashes on login since version 4.2. Device: iPhone 13, iOS 17.4. Reproduced by support three times. Customer is furious and threatening to churn; they are on the enterprise plan.",
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "technical",
+     "probabilities": {
+      "billing": 0.0011,
+      "technical": 0.9857,
+      "sales": 0.0029,
+      "security": 0.004,
+      "hr": 0.0018,
+      "other": 0.0045
+     },
+     "confidence": 0.9462,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.0045,
+     "confidence": 0.9955,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.4095,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.0493,
+      "1": 0.4919,
+      "2": 0.4588
+     },
+     "confidence": 0.2218,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.0837,
+     "confidence": 0.9163,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 487,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "raw_text_ticket::triage.json",
+  "state": "Ticket 55102: user reports the mobile app crashes on login since version 4.2. Device: iPhone 13, iOS 17.4. Reproduced by support three times. Customer is furious and threatening to churn; they are on the enterprise plan.",
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "technical_help",
+     "probabilities": {
+      "refund": 0.003,
+      "technical_help": 0.9869,
+      "billing_question": 0.0015,
+      "information": 0.0014,
+      "cancellation": 0.0034,
+      "other": 0.0037
+     },
+     "confidence": 0.9497,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.0714,
+     "confidence": 0.9286,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 2.2702,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.0079,
+      "1": 0.0422,
+      "2": 0.6214,
+      "3": 0.3284
+     },
+     "confidence": 0.3988,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.1672,
+     "confidence": 0.8328,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.4187,
+     "confidence": 0.5813,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 504,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "structured_state::email.json",
+  "state": {
+   "subject": "Order 7712 issue",
+   "body": "Our order arrived damaged. Two of six chairs are broken and we need replacement parts.",
+   "from": "wei@example.cn",
+   "ticket_id": 7712,
+   "priority": 2.5,
+   "internal_notes": null,
+   "tags": [
+    "shipping",
+    "damaged",
+    "urgent"
+   ],
+   "attempts": {
+    "first_contact": "2026-09-01",
+    "count": 3
+   }
+  },
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "other",
+     "probabilities": {
+      "billing": 0.1742,
+      "technical": 0.0332,
+      "sales": 0.0593,
+      "security": 0.0073,
+      "hr": 0.0085,
+      "other": 0.7175
+     },
+     "confidence": 0.4978,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.0288,
+     "confidence": 0.9712,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.093,
+     "confidence": 0.907,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.6275,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.0218,
+      "1": 0.329,
+      "2": 0.6493
+     },
+     "confidence": 0.336,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.0938,
+     "confidence": 0.9062,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 722,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "structured_state::triage.json",
+  "state": {
+   "subject": "Order 7712 issue",
+   "body": "Our order arrived damaged. Two of six chairs are broken and we need replacement parts.",
+   "from": "wei@example.cn",
+   "ticket_id": 7712,
+   "priority": 2.5,
+   "internal_notes": null,
+   "tags": [
+    "shipping",
+    "damaged",
+    "urgent"
+   ],
+   "attempts": {
+    "first_contact": "2026-09-01",
+    "count": 3
+   }
+  },
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "other",
+     "probabilities": {
+      "refund": 0.0717,
+      "technical_help": 0.0252,
+      "billing_question": 0.1339,
+      "information": 0.0097,
+      "cancellation": 0.005,
+      "other": 0.7545
+     },
+     "confidence": 0.5339,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.221,
+     "confidence": 0.779,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 1.3107,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.1429,
+      "1": 0.438,
+      "2": 0.3846,
+      "3": 0.0345
+     },
+     "confidence": 0.1898,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.2455,
+     "confidence": 0.7545,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.0773,
+     "confidence": 0.9227,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 739,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "list_state::email.json",
+  "state": [
+   {
+    "role": "user",
+    "content": "I was overcharged on my last invoice"
+   },
+   {
+    "role": "agent",
+    "content": "I can help with that. Which invoice number?"
+   },
+   {
+    "role": "user",
+    "content": "The March one, #4471. I need this fixed today."
+   }
+  ],
+  "questions": {
+   "category": {
+    "type": "choice",
+    "instructions": "Which team should handle the email in `body`?",
+    "criteria": {
+     "billing": "invoices, payments, refunds",
+     "technical": "bugs, outages, integrations",
+     "sales": "pricing, demos, new purchases",
+     "security": "phishing, scams, account compromise",
+     "hr": "hiring, leave, payroll",
+     "other": "none of the above"
+    }
+   },
+   "is_spam": {
+    "type": "noul",
+    "instructions": "Is this email unsolicited spam or bulk marketing?"
+   },
+   "is_phishing": {
+    "type": "noul",
+    "instructions": "Is this email a phishing or scam attempt to steal money, credentials, or personal data?",
+    "criteria": {
+     "true": "phishing, scam, or fraud",
+     "false": "a legitimate email"
+    }
+   },
+   "urgency": {
+    "type": "score",
+    "instructions": "How urgent is the request in `body`?",
+    "criteria": [
+     "no time pressure",
+     "needs attention soon",
+     "blocking issue or hard deadline"
+    ]
+   },
+   "needs_reply": {
+    "type": "noul",
+    "instructions": "Does the sender expect a reply?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "category": {
+     "type": "choice",
+     "choice": "billing",
+     "probabilities": {
+      "billing": 0.9985,
+      "technical": 0.0002,
+      "sales": 0.0003,
+      "security": 0.0002,
+      "hr": 0.0002,
+      "other": 0.0005
+     },
+     "confidence": 0.9925,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_spam": {
+     "type": "noul",
+     "noul": 0.0,
+     "confidence": 1.0,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_phishing": {
+     "type": "noul",
+     "noul": 0.078,
+     "confidence": 0.922,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "urgency": {
+     "type": "score",
+     "score": 1.2407,
+     "legend": {
+      "0": "no time pressure",
+      "1": "needs attention soon",
+      "2": "blocking issue or hard deadline"
+     },
+     "probabilities": {
+      "0": 0.08,
+      "1": 0.5993,
+      "2": 0.3207
+     },
+     "confidence": 0.2048,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "needs_reply": {
+     "type": "noul",
+     "noul": 0.2197,
+     "confidence": 0.7803,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 557,
+    "output_tokens": 0
+   }
+  }
+ },
+ {
+  "name": "list_state::triage.json",
+  "state": [
+   {
+    "role": "user",
+    "content": "I was overcharged on my last invoice"
+   },
+   {
+    "role": "agent",
+    "content": "I can help with that. Which invoice number?"
+   },
+   {
+    "role": "user",
+    "content": "The March one, #4471. I need this fixed today."
+   }
+  ],
+  "questions": {
+   "intent": {
+    "type": "choice",
+    "instructions": "What does the customer want in `message`?",
+    "criteria": {
+     "refund": "money returned or a duplicate charge reversed",
+     "technical_help": "a bug, outage or integration problem",
+     "billing_question": "a question about an invoice, plan or payment method",
+     "information": "general information, pricing or how-to",
+     "cancellation": "wants to cancel or downgrade",
+     "other": "none of the other options fits"
+    }
+   },
+   "is_urgent": {
+    "type": "noul",
+    "instructions": "Does `message` communicate time pressure or a deadline?"
+   },
+   "frustration": {
+    "type": "score",
+    "instructions": "How frustrated does the customer sound in `message`?",
+    "criteria": [
+     "calm and neutral",
+     "concerned but civil",
+     "clearly annoyed",
+     "very angry or using strong language"
+    ]
+   },
+   "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer ask for money back?"
+   },
+   "churn_risk": {
+    "type": "noul",
+    "instructions": "Does `message` suggest the customer may leave for a competitor or cancel?"
+   }
+  },
+  "expected": {
+   "model": "laya-rl-agent",
+   "answers": {
+    "intent": {
+     "type": "choice",
+     "choice": "refund",
+     "probabilities": {
+      "refund": 0.7474,
+      "technical_help": 0.0067,
+      "billing_question": 0.163,
+      "information": 0.0027,
+      "cancellation": 0.0134,
+      "other": 0.0668
+     },
+     "confidence": 0.5528,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "is_urgent": {
+     "type": "noul",
+     "noul": 0.1849,
+     "confidence": 0.8151,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "frustration": {
+     "type": "score",
+     "score": 1.6045,
+     "legend": {
+      "0": "calm and neutral",
+      "1": "concerned but civil",
+      "2": "clearly annoyed",
+      "3": "very angry or using strong language"
+     },
+     "probabilities": {
+      "0": 0.0862,
+      "1": 0.3116,
+      "2": 0.5137,
+      "3": 0.0885
+     },
+     "confidence": 0.1838,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "refund_requested": {
+     "type": "noul",
+     "noul": 0.6516,
+     "confidence": 0.6516,
+     "action": {
+      "act_probability": 1.0
+     }
+    },
+    "churn_risk": {
+     "type": "noul",
+     "noul": 0.0578,
+     "confidence": 0.9422,
+     "action": {
+      "act_probability": 1.0
+     }
+    }
+   },
+   "usage": {
+    "input_tokens": 574,
+    "output_tokens": 0
+   }
+  }
+ }
+]

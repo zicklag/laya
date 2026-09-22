@@ -1,0 +1,18 @@
+/home/zicklag/git/other/laya/scratchpad/laya-ort/export/export_onnx.py:155: RuntimeWarning: laya: this checkpoint ships temperatures outside [0.5, 5] which would distort confidence; clamping choice:11+=0.1006. Treat confidence from the affected buckets as uncalibrated.
+  agent = Agent(str(MODEL_DIR), device="cpu")
+/home/zicklag/git/other/laya/scratchpad/laya-ort/export/export_onnx.py:139: DeprecationWarning: You are using the legacy TorchScript-based ONNX export. Starting in PyTorch 2.9, the new torch.export-based ONNX exporter has become the default. Learn more about the new export logic: https://docs.pytorch.org/docs/stable/onnx_export.html. For exporting control flow: https://pytorch.org/tutorials/beginner/onnx/export_control_flow_model_to_onnx_tutorial.html
+  torch.onnx.export(
+/home/zicklag/git/other/laya/scratchpad/laya-ort/.pixi/envs/default/lib/python3.12/site-packages/transformers/masking_utils.py:213: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  if (padding_length := kv_length + kv_offset - attention_mask.shape[-1]) > 0:
+/home/zicklag/git/other/laya/scratchpad/laya-ort/.pixi/envs/default/lib/python3.12/site-packages/transformers/integrations/sdpa_attention.py:124: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  is_causal = q_length > 1 and attention_mask is None and is_causal
+/home/zicklag/git/other/laya/scratchpad/laya-ort/.pixi/envs/default/lib/python3.12/site-packages/laya/common.py:107: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  if detach_encoder:
+/home/zicklag/git/other/laya/scratchpad/laya-ort/.pixi/envs/default/lib/python3.12/site-packages/laya/common.py:122: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+  if p.size(-1) >= 2:
+/home/zicklag/git/other/laya/scratchpad/laya-ort/.pixi/envs/default/lib/python3.12/site-packages/torch/onnx/_internal/torchscript_exporter/symbolic_opset11.py:955: UserWarning: Exporting aten::index operator of advanced indexing in opset 20 is achieved by combination of multiple ONNX operators, including Reshape, Transpose, Concat, and Gather. If indices include negative values, the exported graph will produce incorrect results.
+  return opset9.index(g, self, index)
+W0922 13:15:38.652000 2010058 site-packages/torch/onnx/_internal/exporter/_registration.py:107] torchvision is not installed. Skipping torchvision::nms
+W0922 13:15:38.652000 2010058 site-packages/torch/onnx/_internal/exporter/_registration.py:107] torchvision is not installed. Skipping torchvision::roi_align
+W0922 13:15:38.652000 2010058 site-packages/torch/onnx/_internal/exporter/_registration.py:107] torchvision is not installed. Skipping torchvision::roi_pool
+W0922 13:15:38.653000 2010058 site-packages/torch/onnx/_internal/exporter/_registration.py:107] torchvision is not installed. Skipping torchvision::deform_conv2d

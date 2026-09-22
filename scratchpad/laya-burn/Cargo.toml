@@ -1,0 +1,20 @@
+[package]
+name = "laya-burn"
+version = "0.1.0"
+edition = "2021"
+description = "laya DecisionModel as a native burn module, weights from HF safetensors"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+fancy-regex = "0.14"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+tokenizers = { version = "0.21", default-features = false, features = ["onig"] }
+
+[dependencies.burn]
+version = "=0.22.0-pre.4"
+features = ["ndarray"]
+
+[dependencies.burn-store]
+version = "=0.22.0-pre.4"

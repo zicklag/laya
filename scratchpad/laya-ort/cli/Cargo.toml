@@ -1,0 +1,18 @@
+[package]
+name = "laya-cli"
+version = "0.1.0"
+edition = "2021"
+description = "Playground CLI for laya via ONNX Runtime"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+fancy-regex = "0.14"
+# load-dynamic: the ONNX Runtime shared library comes from the pypi onnxruntime
+# wheel inside the pixi env (auto-discovered via CONDA_PREFIX), NOT from ort's
+# download-binaries — that fetcher uses bundled TLS roots and fails behind the
+# org's TLS-intercepting proxy.
+ort = { version = "=2.0.0-rc.13", default-features = false, features = ["load-dynamic"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+tokenizers = { version = "0.21", default-features = false, features = ["onig"] }
