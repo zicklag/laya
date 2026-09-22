@@ -174,9 +174,49 @@ Two real bugs found:
   `allow_partial(true)` + applied-count verification worked cleanly.
 - burn-store only exists on the 0.22 pre-release line — pin `=0.22.0-pre.4`.
 
-### Next gate (unchanged)
+### Phase 0 executed (2026-09-22): wgpu/Vulkan on the game GPU
 
-Phase 0 = swap `Device::ndarray()` for the wgpu device, re-run this same golden
-gate on GPU, then bench against ort/CPU. VRAM/CPU tradeoffs per the sections
-above still stand; model-size (421M) decision deliberately deferred until the
-apples-to-apples comparison is read.
+GTX 1650 (4 GB, NVIDIA 580.173.02), burn `features = ["ndarray", "vulkan"]`,
+`Device::vulkan(DeviceKind::DiscreteGpu(0))` selected by `LAYA_DEVICE=vulkan`.
+
+**Golden gate: 42/42 PASS, worst |Δp| = 0.00e0 — every case exact on GPU.**
+
+| runtime | 5-question batched call | per question |
+|---|---|---|
+| PyTorch CPU | 1.93 s | ~0.39 s |
+| ort CPU (fixed-512) | 9.2 s | ~1.53 s |
+| burn ndarray CPU | 6.0 s | ~1.19 s |
+| **burn wgpu/Vulkan (f32)** | **0.74 s (p50)** | **~0.15 s** |
+
+~82% GPU utilization, ~2.1 GB VRAM during forward (843 MB f32 weights +
+activations + workspace). Steady-state wall for the whole 42-case validate:
+~75 s including warm cache.
+
+Notes from the run:
+
+- **Dependency fix required**: burn 0.22.0-pre.4 pins `cubek-fft
+  =0.3.0-pre.4`, never published to crates.io (only `0.3.0-pre.1` exists).
+  Fixed with `[patch.crates-io] cubek-fft = { git =
+  "https://github.com/tracel-ai/cubek", tag = "v0.3.0-pre.4" }` in the
+  workspace `Cargo.toml`. Expect this class of breakage from pre-release
+  lines; pin the patch alongside the version.
+- **Dynamic shapes JIT-compile + autotune per shape, per process**: first
+  execution of a distinct (B, L, K) in a process pays kernel compilation and
+  autotune benchmarking (observed ~1-13 s depending on shape size; the biggest
+  sequences worst). Compiled kernel binaries persist in `CUBECL_CACHE_DIR`
+  across runs, but tuning still re-benchmarks unseen shapes per process.
+  Steady state after warmup: ~0.73-0.88 s/case. For the game: bucket L
+  (e.g. pad to 128/256/512) so the kernel set is small and fully warmed.
+- **CubeCL fusion feature: no measurable effect** (bench p50 736.9 ms with
+  fusion vs 737.1 ms without) — the workload is large-GEMM-dominated; fusion
+  targets small-op chains. Fusion also passes the full gate (0.00e0).
+- The port was written backend-agnostic (runtime `Device`), so the GPU switch
+  was one line + features. No model changes needed.
+- First wgpu build: ~10 min (burn-wgpu + cubecl + wgpu graph).
+
+### Next: model-size / architecture decision (now unblocked)
+
+Apples-to-apples is in. The remaining decision inputs: int8 quantization
+(~420 MB weights, 2-4× CPU), f16 GPU weights (421 MB), and whether to distill
+a smaller backbone before freezing the port. The f32 port above is the
+reference implementation for any of those.

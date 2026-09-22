@@ -86,7 +86,10 @@ struct Rt {
 
 impl Rt {
     fn new(model_dir: &Path) -> Result<Self> {
-        let device = Device::ndarray();
+        let device = match std::env::var("LAYA_DEVICE").as_deref() {
+            Ok("vulkan") => Device::vulkan(DeviceKind::DiscreteGpu(0)),
+            _ => Device::ndarray(),
+        };
         let mut model = DecisionModel::init(&device);
         loader::load(&mut model, &model_dir.join("laya-en/model-f32.safetensors"))?;
         Ok(Self { model, device })
