@@ -188,9 +188,10 @@ GTX 1650 (4 GB, NVIDIA 580.173.02), burn `features = ["ndarray", "vulkan"]`,
 | burn ndarray CPU | 6.0 s | ~1.19 s |
 | **burn wgpu/Vulkan (f32)** | **0.74 s (p50)** | **~0.15 s** |
 
-~82% GPU utilization, ~2.1 GB VRAM during forward (843 MB f32 weights +
-activations + workspace). Steady-state wall for the whole 42-case validate:
-~75 s including warm cache.
+~82% GPU utilization. VRAM during forward: ~2.1 GiB steady (1.61 GiB f32
+weights + ~0.5 GiB activations/allocator workspace), transient peaks ~2.3 GiB
+during load. Host RAM peak during load: ~2.7 GiB (full-file parse + transpose
+copies + upload staging).
 
 Notes from the run:
 

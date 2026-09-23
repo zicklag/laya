@@ -10,6 +10,7 @@ mod post;
 mod seq;
 
 use anyhow::{anyhow, bail, Context, Result};
+use burn::tensor::FloatDType;
 use burn::prelude::*;
 use clap::{Parser, Subcommand};
 use serde_json::{json, Map, Value};
@@ -90,8 +91,19 @@ impl Rt {
             Ok("vulkan") => Device::vulkan(DeviceKind::DiscreteGpu(0)),
             _ => Device::ndarray(),
         };
+        // The original checkpoint is f16 and loads verbatim (burn adopts the
+        // record's dtype); the ndarray CPU backend needs f32, so a widened
+        // copy (same keys, same torch layouts) exists for it.
+        let file = match std::env::var("LAYA_DTYPE").as_deref() {
+            Ok("f16") => "model.safetensors",
+            Ok("f32") => "model-f32.safetensors",
+            _ => match std::env::var("LAYA_DEVICE").as_deref() {
+                Ok("vulkan") => "model.safetensors",
+                _ => "model-f32.safetensors",
+            },
+        };
         let mut model = DecisionModel::init(&device);
-        loader::load(&mut model, &model_dir.join("laya-en/model-f32.safetensors"))?;
+        loader::load(&mut model, &model_dir.join(format!("laya-en/{file}")))?;
         Ok(Self { model, device })
     }
 
@@ -118,8 +130,16 @@ impl Rt {
             &self.device,
         );
         let (logits, act) = self.model.forward(ids, att, mpos, mmask, qt);
-        let l = logits.into_data().to_vec::<f32>()?;
-        let a = act.into_data().to_vec::<f32>()?;
+        // The model's dtype follows the checkpoint (f16 on GPU); read the
+        // results back as f32 for the post-processing layer.
+        let l = logits
+            .cast::<FloatDType>(FloatDType::F32)
+            .into_data()
+            .try_to_vec::<f32>()?;
+        let a = act
+            .cast::<FloatDType>(FloatDType::F32)
+            .into_data()
+            .try_to_vec::<f32>()?;
         Ok((l, a))
     }
 }

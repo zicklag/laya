@@ -20,13 +20,7 @@ pub fn load (
         .with_key_remapping("scorer.1", "scorer.linear1")
         .with_key_remapping("scorer.3", "scorer.linear2")
         .with_key_remapping("act_head.0", "act_head.linear1")
-        .with_key_remapping("act_head.2", "act_head.linear2")
-        .with_key_remapping("scorer.norm.weight", "scorer.norm.gamma")
-        .with_key_remapping("scorer.norm.bias", "scorer.norm.beta")
-        .with_key_remapping("norm1.weight", "norm1.gamma")
-        .with_key_remapping("norm1.bias", "norm1.beta")
-        .with_key_remapping("norm2.weight", "norm2.gamma")
-        .with_key_remapping("norm2.bias", "norm2.beta");
+        .with_key_remapping("act_head.2", "act_head.linear2");
     let result = model
         .load_from(&mut store)
         .map_err(|e| anyhow!("safetensors apply failed: {e}"))
