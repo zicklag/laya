@@ -87,23 +87,11 @@ struct Rt {
 
 impl Rt {
     fn new(model_dir: &Path) -> Result<Self> {
-        let device = match std::env::var("LAYA_DEVICE").as_deref() {
-            Ok("vulkan") => Device::vulkan(DeviceKind::DiscreteGpu(0)),
-            _ => Device::ndarray(),
-        };
-        // The original checkpoint is f16 and loads verbatim (burn adopts the
-        // record's dtype); the ndarray CPU backend needs f32, so a widened
-        // copy (same keys, same torch layouts) exists for it.
-        let file = match std::env::var("LAYA_DTYPE").as_deref() {
-            Ok("f16") => "model.safetensors",
-            Ok("f32") => "model-f32.safetensors",
-            _ => match std::env::var("LAYA_DEVICE").as_deref() {
-                Ok("vulkan") => "model.safetensors",
-                _ => "model-f32.safetensors",
-            },
-        };
-        let mut model = DecisionModel::init(&device);
-        loader::load(&mut model, &model_dir.join(format!("laya-en/{file}")))?;
+        // The original checkpoint is f16 and loads verbatim; the model
+        // computes in f32, upcasting params at each op (see model.rs).
+        let device = Device::vulkan(DeviceKind::DiscreteGpu(0));
+        let model = DecisionModel::init(&device);
+        let model = loader::load(model, &model_dir.join("laya-en/model.safetensors"))?;
         Ok(Self { model, device })
     }
 

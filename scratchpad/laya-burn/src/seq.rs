@@ -21,12 +21,6 @@ pub struct Meta {
     pub max_len: usize,
     #[serde(default = "default_head_max_len")]
     pub head_max_len: usize,
-    #[serde(default = "default_fixed_b")]
-    pub fixed_b: usize,
-    #[serde(default = "default_fixed_l")]
-    pub fixed_l: usize,
-    #[serde(default = "default_fixed_k")]
-    pub fixed_k: usize,
     pub pad_id: i64,
     pub cls_id: i64,
     pub sep_id: i64,
@@ -45,15 +39,6 @@ fn default_max_len() -> usize {
 }
 fn default_head_max_len() -> usize {
     192
-}
-fn default_fixed_b() -> usize {
-    6
-}
-fn default_fixed_l() -> usize {
-    512
-}
-fn default_fixed_k() -> usize {
-    64
 }
 fn default_temps() -> Vec<f64> {
     vec![1.0, 1.0, 1.0]

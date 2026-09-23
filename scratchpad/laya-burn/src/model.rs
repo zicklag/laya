@@ -15,6 +15,7 @@
 
 use burn::module::Param;
 use burn::nn::{Embedding, EmbeddingConfig};
+use burn::module::Module;
 use burn::tensor::{FloatDType, TensorCreationOptions};
 use burn::prelude::*;
 use burn::tensor::activation::{gelu, relu, softmax};
@@ -115,6 +116,7 @@ impl BiasNorm {
     }
 }
 
+
 /// Linear with the torch-style `[out, in]` weight the HF checkpoint stores
 /// (plus bias). burn's `nn::Linear` stores `[in, out]`, so instead of
 /// pre-transposing the checkpoint we transpose at use — the original
@@ -207,8 +209,10 @@ impl HeadLayer {
         let hn = self.norm1.forward(x.clone());
         let [b, l, _] = hn.dims().try_into().unwrap();
 
+
         let qkv = burn::tensor::module::linear(
-            hn.cast::<FloatDType>(FloatDType::F32),
+            // BiasNorm already upcast; hn is f32.
+            hn,
             self.self_attn
                 .in_proj_weight
                 .val()
@@ -465,17 +469,12 @@ impl DecisionModel {
         rope_c: &(Tensor<4>, Tensor<4>),
         rope_s: &(Tensor<4>, Tensor<4>),
     ) -> Tensor<3> {
+        // NoBiasNorm upcasts internally; the raw f16 embedding output is fine.
         let mut h = self
             .encoder
             .embeddings
             .norm
-            .forward(
-                self.encoder
-                    .embeddings
-                    .tok_embeddings
-                    .forward(ids)
-                    .cast::<FloatDType>(FloatDType::F32),
-            );
+            .forward(self.encoder.embeddings.tok_embeddings.forward(ids));
         let l = h.dims()[1];
         for (i, layer) in self.encoder.layers.iter().enumerate() {
             let is_global = i % 3 == 0;

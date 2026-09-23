@@ -6,14 +6,13 @@
 //! layer 0's absent attn_norm; the applied count must be exactly 206 - 1.
 
 use anyhow::{anyhow, Context, Result};
-use burn_store::{ApplyResult, ModuleSnapshot, SafetensorsStore};
+use burn_store::{ModuleSnapshot, SafetensorsStore};
 
 use crate::model::DecisionModel;
 
-pub fn load (
-    model: &mut DecisionModel,
-    path: &std::path::Path,
-) -> Result<ApplyResult> {
+pub fn load(mut model: DecisionModel, path: &std::path::Path) -> Result<DecisionModel> {
+    // The f16 checkpoint loads verbatim; the model upcasts to f32 per op
+    // (see model.rs). No on-disk conversion is involved.
     let mut store = SafetensorsStore::from_file(path)
         .allow_partial(true)
         .with_key_remapping("scorer.0", "scorer.norm")
@@ -39,14 +38,15 @@ pub fn load (
             result.unused
         ));
     }
-    if result.unused.is_empty() && result.missing.len() == 1 && result.missing[0].0 == "encoder.layers.0.attn_norm.weight" {
-        // exact expected state
-    } else {
+    if !(result.unused.is_empty()
+        && result.missing.len() == 1
+        && result.missing[0].0 == "encoder.layers.0.attn_norm.weight")
+    {
         return Err(anyhow!(
             "unexpected load state: missing={:?} unused={:?}",
             result.missing,
             result.unused
         ));
     }
-    Ok(result)
+    Ok(model)
 }

@@ -89,6 +89,10 @@ was never published to crates.io) and is unrelated to memory.
   agreement, act-head agreement) — relaxing the parity gate needs sign-off.
 - **Model-size / architecture decision** (deferred): distill a smaller backbone
   vs int8/int4 vs f32 — apples-to-apples numbers are in `scratchpad/ai/burn-plan-1.md`.
-- `burn-ndarray` is deprecated in 0.22-pre (use `Device::flex()`); the CPU
-  parity path still uses ndarray deliberately — revisit when burn 0.22
-  stabilizes.
+- **CPU backend removed**: wgpu/Vulkan is the only backend (`Device::vulkan`).
+  burn-ndarray couldn't hold f16 storage, and the only non-ndarray pure-Rust
+  CPU alternative (CubeCL's `cpu` feature) needs a `tracel-llvm-bundler` build
+  step that downloads a bundled-CA LLVM toolchain — fails behind the
+  TLS-intercepting proxy (`InvalidCertificate(UnknownIssuer)`; pre-seeding
+  `~/.cache/tracel/` is blocked by the read-only `~/.cache`). Revisit only if
+  a CPU fallback is ever needed (the ort playground already covers CPU).

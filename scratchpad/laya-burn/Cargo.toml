@@ -14,7 +14,7 @@ tokenizers = { version = "0.21", default-features = false, features = ["onig"] }
 
 [dependencies.burn]
 version = "=0.22.0-pre.4"
-features = ["ndarray", "vulkan", "fusion"]
+features = ["vulkan", "fusion"]
 
 [dependencies.burn-store]
 version = "=0.22.0-pre.4"
