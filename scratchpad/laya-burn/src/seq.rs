@@ -8,7 +8,7 @@ use tokenizers::Tokenizer;
 
 pub const QTYPE_NAMES: [&str; 3] = ["choice", "score", "noul"];
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Q {
     pub t: String,
     pub ins: String,
@@ -44,7 +44,12 @@ fn default_temps() -> Vec<f64> {
     vec![1.0, 1.0, 1.0]
 }
 fn default_qtypes() -> std::collections::HashMap<String, usize> {
-    [("choice".into(), 0), ("score".into(), 1), ("noul".into(), 2)].into()
+    [
+        ("choice".into(), 0),
+        ("score".into(), 1),
+        ("noul".into(), 2),
+    ]
+    .into()
 }
 
 impl Meta {
@@ -254,11 +259,7 @@ pub struct Batch {
 pub fn collate(items: &[Item], pad_id: i64) -> Batch {
     let b = items.len();
     let l = items.iter().map(|i| i.ids.len()).max().unwrap_or(0);
-    let k = items
-        .iter()
-        .map(|i| i.markers.len())
-        .max()
-        .unwrap_or(0);
+    let k = items.iter().map(|i| i.markers.len()).max().unwrap_or(0);
     let mut ids = vec![pad_id; b * l];
     let mut att = vec![0i64; b * l];
     let mut mpos = vec![0i64; b * k];

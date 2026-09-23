@@ -5,15 +5,16 @@
 //! The engine lives in the `laya_burn` library target (`src/session.rs` and
 //! friends); this binary is only the clap wrapper and output formatting.
 
-
 use anyhow::{anyhow, bail, Context, Result};
 use burn::prelude::*;
 use clap::{Parser, Subcommand};
-use serde_json::{json, Map, Value};
+use serde_json::{json, Value};
 use std::path::{Path, PathBuf};
 use std::time::Instant;
-use laya_burn::{predict, session};
 
+mod email;
+
+use laya_burn::{session, Questions};
 
 const TOL: f64 = 1e-3;
 
@@ -65,7 +66,6 @@ enum Cmd {
     },
 }
 
-
 fn read_state_source(src: &str) -> Result<Value> {
     let text = if src == "-" {
         let mut buf = String::new();
@@ -80,13 +80,17 @@ fn read_state_source(src: &str) -> Result<Value> {
     }
 }
 
-fn load_questions(path: &Path) -> Result<Map<String, Value>> {
+fn load_questions(path: &Path) -> Result<Questions> {
     let v: Value = serde_json::from_str(
         &std::fs::read_to_string(path).with_context(|| format!("reading {}", path.display()))?,
     )?;
-    v.as_object().cloned().ok_or_else(|| {
-        anyhow!("{} must be an object of question-id -> question-def", path.display())
-    })
+    let defs = v.as_object().ok_or_else(|| {
+        anyhow!(
+            "{} must be an object of question-id -> question-def",
+            path.display()
+        )
+    })?;
+    Questions::from_defs(defs)
 }
 
 fn print_human(result: &Value) {
@@ -184,7 +188,13 @@ fn compare_answers(expected: &Value, ours: &Value) -> Result<(f64, Vec<String>)>
                         &mut bad,
                     );
                 }
-                check(&format!("{qid}.confidence"), num(&e["confidence"])?, num(&g["confidence"])?, &mut worst, &mut bad);
+                check(
+                    &format!("{qid}.confidence"),
+                    num(&e["confidence"])?,
+                    num(&g["confidence"])?,
+                    &mut worst,
+                    &mut bad,
+                );
                 check(
                     &format!("{qid}.act"),
                     num(&e["action"]["act_probability"])?,
@@ -194,7 +204,13 @@ fn compare_answers(expected: &Value, ours: &Value) -> Result<(f64, Vec<String>)>
                 );
             }
             "score" => {
-                check(&format!("{qid}.score"), num(&e["score"])?, num(&g["score"])?, &mut worst, &mut bad);
+                check(
+                    &format!("{qid}.score"),
+                    num(&e["score"])?,
+                    num(&g["score"])?,
+                    &mut worst,
+                    &mut bad,
+                );
                 let ep = e["probabilities"].as_object().expect("probabilities");
                 let gp = g["probabilities"].as_object().expect("probabilities");
                 for (k, v) in ep {
@@ -206,7 +222,13 @@ fn compare_answers(expected: &Value, ours: &Value) -> Result<(f64, Vec<String>)>
                         &mut bad,
                     );
                 }
-                check(&format!("{qid}.confidence"), num(&e["confidence"])?, num(&g["confidence"])?, &mut worst, &mut bad);
+                check(
+                    &format!("{qid}.confidence"),
+                    num(&e["confidence"])?,
+                    num(&g["confidence"])?,
+                    &mut worst,
+                    &mut bad,
+                );
                 check(
                     &format!("{qid}.act"),
                     num(&e["action"]["act_probability"])?,
@@ -216,8 +238,20 @@ fn compare_answers(expected: &Value, ours: &Value) -> Result<(f64, Vec<String>)>
                 );
             }
             _ => {
-                check(&format!("{qid}.noul"), num(&e["noul"])?, num(&g["noul"])?, &mut worst, &mut bad);
-                check(&format!("{qid}.confidence"), num(&e["confidence"])?, num(&g["confidence"])?, &mut worst, &mut bad);
+                check(
+                    &format!("{qid}.noul"),
+                    num(&e["noul"])?,
+                    num(&g["noul"])?,
+                    &mut worst,
+                    &mut bad,
+                );
+                check(
+                    &format!("{qid}.confidence"),
+                    num(&e["confidence"])?,
+                    num(&g["confidence"])?,
+                    &mut worst,
+                    &mut bad,
+                );
                 check(
                     &format!("{qid}.act"),
                     num(&e["action"]["act_probability"])?,
@@ -250,10 +284,11 @@ fn main() -> Result<()> {
                 }
                 Some(f) => std::fs::read_to_string(f)?,
             };
-            let state = sess.cleaner.email_state(&subject, &body, sender.as_deref());
+            let cleaner = email::EmailCleaner::new()?;
+            let state = cleaner.email_state(&subject, &body, sender.as_deref());
             let qs = load_questions(&questions)?;
             let t0 = Instant::now();
-            let result = predict(&mut sess, &state, &qs)?;
+            let result = sess.predict(&state, &qs)?;
             let dt = t0.elapsed();
             if as_json {
                 println!("{}", serde_json::to_string_pretty(&result)?);
@@ -273,7 +308,7 @@ fn main() -> Result<()> {
                     .ok_or_else(|| anyhow!("--state-file required ('-' for stdin)"))?,
             )?;
             let qs = load_questions(&questions)?;
-            let result = predict(&mut sess, &state, &qs)?;
+            let result = sess.predict(&state, &qs)?;
             if as_json {
                 println!("{}", serde_json::to_string_pretty(&result)?);
             } else {
@@ -287,11 +322,13 @@ fn main() -> Result<()> {
             let mut n_bad = 0usize;
             for case in &cases {
                 let name = case["name"].as_str().unwrap_or("<unnamed>");
-                let qs = case["questions"]
-                    .as_object()
-                    .ok_or_else(|| anyhow!("case {name}: missing questions"))?;
+                let qs = Questions::from_defs(
+                    case["questions"]
+                        .as_object()
+                        .ok_or_else(|| anyhow!("case {name}: missing questions"))?,
+                )?;
                 let t0 = Instant::now();
-                let ours = predict(&mut sess, &case["state"], qs)?;
+                let ours = sess.predict(&case["state"], &qs)?;
                 let dt = t0.elapsed();
                 match compare_answers(&case["expected"]["answers"], &ours["answers"]) {
                     Ok((worst, bad)) => {
@@ -332,12 +369,12 @@ fn main() -> Result<()> {
                 "from": "priya@example.com",
             });
             for _ in 0..2 {
-                predict(&mut sess, &state, &qs)?;
+                sess.predict(&state, &qs)?;
             }
             let mut times = Vec::with_capacity(n);
             for _ in 0..n {
                 let t0 = Instant::now();
-                predict(&mut sess, &state, &qs)?;
+                sess.predict(&state, &qs)?;
                 times.push(t0.elapsed().as_secs_f64() * 1e3);
             }
             times.sort_by(|a, b| a.partial_cmp(b).unwrap());

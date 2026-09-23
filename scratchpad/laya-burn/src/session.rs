@@ -1,6 +1,7 @@
-//! Session runtime: model + tokenizer + meta + email cleaner, and the
-//! `Agent.system_one` predict pipeline. This is the library surface a game
-//! or custom CLI imports.
+//! Session runtime: model + tokenizer + meta, and the `Agent.system_one`
+//! predict pipeline. This is the high-level surface a game or custom CLI
+//! imports; the lower layers ([`crate::seq`], [`Rt::run`], [`crate::post`])
+//! stay public for custom pipelines.
 //!
 //! The original checkpoint is f16 and loads verbatim; the model computes in
 //! f32, upcasting params at each op (see `model.rs`).
@@ -12,18 +13,17 @@ use serde_json::{json, Map, Value};
 use std::path::Path;
 use tokenizers::Tokenizer;
 
-use crate::email;
 use crate::loader;
 use crate::model::DecisionModel;
 use crate::post;
+use crate::question::Questions;
 use crate::seq::{self, Meta};
 
-/// Loaded engine: weights, tokenizer, question meta, email cleaner.
+/// Loaded engine: weights, tokenizer, and question meta.
 pub struct Session {
     pub rt: Rt,
     pub tok: Tokenizer,
     pub meta: Meta,
-    pub cleaner: email::EmailCleaner,
 }
 
 pub struct Rt {
@@ -85,72 +85,79 @@ pub fn load(model_dir: &Path, device: Device) -> Result<Session> {
     let tok = Tokenizer::from_file(model_dir.join("laya-en/tokenizer/tokenizer.json"))
         .map_err(|e| anyhow!("loading tokenizer: {e}"))?;
     let rt = Rt::new(model_dir, device)?;
-    let cleaner = email::EmailCleaner::new()?;
-    Ok(Session {
-        rt,
-        tok,
-        meta,
-        cleaner,
-    })
+    Ok(Session { rt, tok, meta })
 }
 
-/// Agent.system_one on burn: state + question defs -> answers JSON.
-pub fn predict(sess: &mut Session, state: &Value, questions: &Map<String, Value>) -> Result<Value> {
-    let state_text = seq::serialize_state(state);
-    let mut items: Vec<seq::Item> = Vec::new();
-    for (qid, qdef) in questions {
-        let q = seq::to_internal(qdef)?;
-        let (ids, markers) = seq::build_sequence(&sess.tok, &sess.meta, &state_text, &q)?;
-        let n_opts = seq::render_options(&q).len();
-        if markers.len() != n_opts {
-            bail!(
-                "question {qid:?}: options exceed head_max_len={} ({} markers for {} options)",
-                sess.meta.head_max_len,
-                markers.len(),
-                n_opts
-            );
+impl Session {
+    /// Agent.system_one on burn: state + questions -> answers JSON.
+    ///
+    /// `state` may be a JSON object/array (serialized with laya's exact
+    /// Python-JSON formatting) or a plain string (used verbatim). Answers are
+    /// keyed by question id, in question order.
+    pub fn predict(&mut self, state: &Value, questions: &Questions) -> Result<Value> {
+        if questions.is_empty() {
+            bail!("no questions to answer");
         }
-        if markers.len() < 2 {
-            bail!("question {qid:?}: single-option questions are unsupported (K >= 2 required)");
+        let state_text = seq::serialize_state(state);
+        let mut items: Vec<seq::Item> = Vec::new();
+        for question in questions.iter() {
+            let (ids, markers) =
+                seq::build_sequence(&self.tok, &self.meta, &state_text, &question.q)?;
+            let n_opts = seq::render_options(&question.q).len();
+            if markers.len() != n_opts {
+                bail!(
+                    "question {:?}: options exceed head_max_len={} ({} markers for {} options)",
+                    question.id,
+                    self.meta.head_max_len,
+                    markers.len(),
+                    n_opts
+                );
+            }
+            if markers.len() < 2 {
+                bail!(
+                    "question {:?}: single-option questions are unsupported (K >= 2 required)",
+                    question.id
+                );
+            }
+            let qt = self.meta.qtype(&question.q.t)? as i64;
+            items.push(seq::Item {
+                qid: question.id.clone(),
+                q: question.q.clone(),
+                ids,
+                markers,
+                qtype: qt,
+            });
         }
-        let qt = sess.meta.qtype(&q.t)? as i64;
-        items.push(seq::Item {
-            qid: qid.clone(),
-            q,
-            ids,
-            markers,
-            qtype: qt,
-        });
-    }
 
-    let batch = seq::collate(&items, sess.meta.pad_id);
-    let (logits, act) = sess.rt.run(&batch)?;
-    let lstride = logits.len() / batch.b;
-    let astride = act.len() / batch.b;
+        let batch = seq::collate(&items, self.meta.pad_id);
+        let (logits, act) = self.rt.run(&batch)?;
+        let lstride = logits.len() / batch.b;
+        let astride = act.len() / batch.b;
 
-    let mut answers = Map::new();
-    let mut n_tokens = 0u64;
-    for (r, it) in items.iter().enumerate() {
-        let row = &logits[r * lstride..][..lstride];
-        let actr = &act[r * astride..][..astride];
-        let v = post::answer_value(
-            &it.q,
-            &it.qid,
-            it.qtype as usize,
-            batch.ks[r],
-            row,
-            actr,
-            &sess.meta,
-        )?;
-        answers.insert(it.qid.clone(), v);
-        n_tokens += batch.attention_mask[r * batch.l..(r + 1) * batch.l]
-            .iter()
-            .filter(|&&x| x == 1)
-            .count() as u64;
+        let mut answers = Map::new();
+        let mut n_tokens = 0u64;
+        for (r, it) in items.iter().enumerate() {
+            let row = &logits[r * lstride..][..lstride];
+            let actr = &act[r * astride..][..astride];
+            let v = post::answer_value(
+                &it.q,
+                &it.qid,
+                it.qtype as usize,
+                batch.ks[r],
+                row,
+                actr,
+                &self.meta,
+            )?;
+            answers.insert(it.qid.clone(), v);
+            n_tokens += batch.attention_mask[r * batch.l..(r + 1) * batch.l]
+                .iter()
+                .filter(|&&x| x == 1)
+                .count() as u64;
+        }
+        Ok(json!({
+            "model": "laya-burn",
+            "answers": answers,
+            "usage": {"input_tokens": n_tokens, "output_tokens": 0},
+        }))
     }
-    Ok(json!({
-        "model": "laya-burn",
-        "answers": answers,
-        "usage": {"input_tokens": n_tokens, "output_tokens": 0},
-    }))
 }

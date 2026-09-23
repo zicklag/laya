@@ -34,7 +34,9 @@ impl EmailCleaner {
             // _SIGNATURE_MARKERS: [0] has no re.I in Python; keep it exact
             signature_markers: vec![
                 rx(r"^\s*--\s*$")?,
-                rx(r"(?i)^\s*(best|kind|warm|many thanks|thanks|thank you|regards|cheers|sincerely)[\w ,!.]*$")?,
+                rx(
+                    r"(?i)^\s*(best|kind|warm|many thanks|thanks|thank you|regards|cheers|sincerely)[\w ,!.]*$",
+                )?,
                 rx(r"(?i)^\s*sent from my (iphone|android|mobile|ipad)")?,
             ],
             disclaimer: rx(
@@ -89,7 +91,10 @@ impl EmailCleaner {
             let start = 1i64.max(a.min(b)) as usize;
             for i in start..lines.len() {
                 if lines[i].trim().chars().count() <= 40
-                    && self.signature_markers.iter().any(|re| is_match(re, lines[i]))
+                    && self
+                        .signature_markers
+                        .iter()
+                        .any(|re| is_match(re, lines[i]))
                 {
                     cut = i;
                     break;
